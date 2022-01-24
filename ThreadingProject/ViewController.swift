@@ -19,11 +19,18 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
         tblView.dataSource = self
         tblView.delegate = self
         do {
-              data = try Data(contentsOf: URL(string: urlStrings[tracker])!)
-            imgView.image = UIImage(data: data)
+            DispatchQueue.global().async {
+                   self.data = try! Data(contentsOf: URL(string: self.urlStrings[self.tracker])!) //background thread
+                   DispatchQueue.main.async {
+                       self.imgView.image = UIImage(data: self.data)//main thread
+                   }
+               }
         } catch  {
             print("some error occur\(error)")
         }
+            
+            
+      
         self.navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.compose, target: self, action: #selector(navigatorBarButtonPressed))
         
     }
@@ -34,8 +41,12 @@ class ViewController: UIViewController ,UITableViewDelegate,UITableViewDataSourc
             tracker = 0
         }
         do {
-              data = try Data(contentsOf: URL(string: urlStrings[tracker])!)
-            imgView.image = UIImage(data: data)
+            DispatchQueue.global().async {
+                   self.data = try! Data(contentsOf: URL(string: self.urlStrings[self.tracker])!) //background thread
+                   DispatchQueue.main.async {
+                       self.imgView.image = UIImage(data: self.data)//main thread
+                   }
+               }
         } catch  {
             print("some error occur\(error)")
         }
